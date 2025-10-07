@@ -1,0 +1,3 @@
+src_database: analytics_src
+src_schema: public
+warehouse: xsmall
