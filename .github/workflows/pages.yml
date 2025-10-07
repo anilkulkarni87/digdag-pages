@@ -38,10 +38,10 @@ jobs:
 
       - name: Generate workflow site
         run: |
-          # Run generator from repo root
-          digdag-pages
-          # Provide an index.html that forwards to scheduled_workflows.html
-          echo "<!doctype html><meta charset='utf-8'><meta http-equiv='refresh' content='0; url=scheduled_workflows.html'><title>Redirect</title>" > index.html
+            # Run generator from repo root via module to avoid PATH/entrypoint issues
+            python -m digdaggraph.cli
+            # Provide an index.html that forwards to scheduled_workflows.html
+            echo "<!doctype html><meta charset='utf-8'><meta http-equiv='refresh' content='0; url=scheduled_workflows.html'><title>Redirect</title>" > index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
