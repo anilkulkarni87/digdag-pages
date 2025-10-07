@@ -33,20 +33,33 @@ jobs:
 
       - name: Install project
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip setuptools wheel
           pip install -e .
 
       - name: Generate workflow site
         run: |
-            # Run generator from repo root via module to avoid PATH/entrypoint issues
-            python -m digdaggraph.cli
-            # Provide an index.html that forwards to scheduled_workflows.html
-            echo "<!doctype html><meta charset='utf-8'><meta http-equiv='refresh' content='0; url=scheduled_workflows.html'><title>Redirect</title>" > index.html
+          # Run generator via module to avoid PATH issues
+          python -m digdaggraph.cli
+
+          # Add a root redirect for Pages home
+          echo "<!doctype html><meta charset='utf-8'><meta http-equiv='refresh' content='0; url=scheduled_workflows.html'><title>Redirect</title>" > index.html
+
+          # Sanity check we actually produced the artifacts
+          test -f scheduled_workflows.html
+          test -d graphs
+
+      - name: Stage artifacts for Pages
+        run: |
+          mkdir -p _site
+          cp -v scheduled_workflows.html _site/
+          cp -v index.html _site/
+          cp -rv graphs _site/
+          echo "Contents to deploy:" && find _site -maxdepth 2 -type f -print
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./
+          path: _site
 
   deploy:
     environment:
