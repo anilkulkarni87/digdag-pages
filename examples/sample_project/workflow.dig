@@ -6,7 +6,6 @@ schedule:
 _export:
   # bring in shared settings via include-as-key
   !include: "config/environment.yml"
-  retries: 1
 
 +start:
   echo>: "Kick off sample workflow"
