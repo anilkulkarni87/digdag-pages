@@ -18,7 +18,7 @@ _export:
 +branch:
   _do:
     +if_check:
-      if>: ${true}
+      if>: "${true}"     # <-- QUOTED
       _do:
         +notify:
           mail>: "someone@example.com"
