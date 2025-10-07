@@ -22,6 +22,9 @@ def _construct_include(loader: DigLoader, node: yaml.nodes.ScalarNode) -> "Inclu
     return IncludeRef(rel, loader._root)
 
 yaml.add_constructor("!include", _construct_include, Loader=DigLoader)
+# Some YAML writers tokenize the key as a tag named "!include:" (including the colon).
+# Register both to be robust across environments.
+yaml.add_constructor("!include:", _construct_include, Loader=DigLoader)
 
 def _deep_merge(dst: Dict[str, Any], src: Dict[str, Any]) -> Dict[str, Any]:
     for k, v in src.items():
