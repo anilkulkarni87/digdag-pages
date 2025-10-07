@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "digdag-pages"
+version = "0.1.0"
+description = "Generate dark-themed inline-SVG HTML workflow pages and a schedule index from Digdag .dig files, with Prism-highlighted SQL pages."
+readme = "README.md"
+authors = [{ name = "Your Name" }]
+license = { text = "MIT" }
+requires-python = ">=3.9"
+dependencies = [
+  "PyYAML>=6.0",
+  "graphviz>=0.20",
+  "cron-descriptor>=1.4",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+[project.scripts]
+digdaggraph = "digdaggraph.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0",
+  "ruff>=0.5.0",
+  "black>=24.0.0",
+  "build>=1.0.0",
+]
+
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-select = ["E","F","W","I"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["digdaggraph*"]
+exclude = ["tests*", "examples*"]
+
+
+[project.urls]
+Homepage = "https://github.com/your-org/digdaggraph"
+Repository = "https://github.com/your-org/digdaggraph"
+Issues = "https://github.com/your-org/digdaggraph/issues"
