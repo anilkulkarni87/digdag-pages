@@ -28,33 +28,51 @@ jobs:
 
       - name: Install system deps (graphviz)
         run: |
+          set -euxo pipefail
           sudo apt-get update
           sudo apt-get install -y graphviz
+          which dot
+          dot -V || true
 
       - name: Install project
         run: |
+          set -euxo pipefail
           python -m pip install --upgrade pip setuptools wheel
           pip install -e .
 
       - name: Generate workflow site
         run: |
-          # Run generator via module to avoid PATH issues
+          set -euxo pipefail
+          # Run generator via module to avoid console-script PATH issues
           python -m digdaggraph.cli
 
-          # Add a root redirect for Pages home
+          # Root redirect to the schedule index for Pages home
           echo "<!doctype html><meta charset='utf-8'><meta http-equiv='refresh' content='0; url=scheduled_workflows.html'><title>Redirect</title>" > index.html
 
-          # Sanity check we actually produced the artifacts
-          test -f scheduled_workflows.html
-          test -d graphs
+          echo "Repo root after generation:"
+          ls -la
+
+          echo "Graphs tree (if exists):"
+          if [ -d graphs ]; then find graphs -maxdepth 2 -type f -print; else echo "No graphs dir yet"; fi
+
+          # Sanity check (fail early with clear message)
+          if [ ! -f scheduled_workflows.html ]; then
+            echo "::error::scheduled_workflows.html not found. The generator likely failed (check logs above)."
+            exit 1
+          fi
+          if [ ! -d graphs ]; then
+            echo "::warning::graphs/ not found. If you have no .dig files, this can be empty; continuing."
+            # We still continue so that at least scheduled_workflows.html is published
+          fi
 
       - name: Stage artifacts for Pages
         run: |
+          set -euxo pipefail
           mkdir -p _site
           cp -v scheduled_workflows.html _site/
           cp -v index.html _site/
-          cp -rv graphs _site/
-          echo "Contents to deploy:" && find _site -maxdepth 2 -type f -print
+          if [ -d graphs ]; then cp -rv graphs _site/; fi
+          echo "Contents to deploy:" && find _site -maxdepth 2 -print
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
