@@ -5,7 +5,7 @@ schedule:
 
 _export:
   # bring in shared settings via include-as-key
-  !include: "config/environment.yml"
+  !include: config/environment.yml
 
 +start:
   echo>: "Kick off sample workflow"
