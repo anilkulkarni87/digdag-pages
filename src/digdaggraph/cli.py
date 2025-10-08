@@ -1,9 +1,9 @@
 import time
 from pathlib import Path
 import os
-from .constants import GRAPHS_DIR, SCHEDULE_INDEX_FILE
+from .constants import GRAPHS_DIR, SCHEDULE_INDEX_FILE, UNSCHEDULED_INDEX_FILE
 from .graph_generate import generate_graph
-from .index_page import write_scheduled_workflows, ScheduleEntry
+from .index_page import write_scheduled_workflows, ScheduleEntry, write_unscheduled_workflows
 from .logging_config import get_logger
 
 logger = get_logger(__name__)
@@ -39,6 +39,7 @@ def main() -> None:
     count = 0
     Path(GRAPHS_DIR).mkdir(exist_ok=True)
     schedule_entries: list[ScheduleEntry] = []
+    unscheduled_entries: list[ScheduleEntry] = []  
 
     # Discover .dig files
     dig_files = [p for p in Path(os.getcwd()).rglob("*.dig") if GRAPHS_DIR not in str(p)]
@@ -78,15 +79,27 @@ def main() -> None:
                         href=f"./{GRAPHS_DIR}/{path.parent.name}/{path.name.replace('.dig','.html')}",
                     )
                 )
+            else:
+                # NEW: track unscheduled
+                unscheduled_entries.append(
+                    ScheduleEntry(
+                        project=path.parent.name,
+                        workflow=path.name,
+                        schedule_text="",   # ignored by the unscheduled page
+                        href=href,
+                    )
+                )
         except Exception as e:
             logger.warning(f"Schedule collection failed for {input_file_path}: {e}")
 
     # Always write the index
     write_scheduled_workflows(schedule_entries, out_path=SCHEDULE_INDEX_FILE)
+    write_unscheduled_workflows(unscheduled_entries, out_path=UNSCHEDULED_INDEX_FILE)
 
     elapsed = time.time() - start_time
     print(f"Graphs generated: {count} | TIME: {elapsed:.2f}s")
-    print(f"Wrote {SCHEDULE_INDEX_FILE}")
+    print(f"Workflows: {len(dig_files)} | scheduled: {len(schedule_entries)} | unscheduled: {len(unscheduled_entries)}")
+    print(f"Wrote {SCHEDULE_INDEX_FILE} and {UNSCHEDULED_INDEX_FILE}")
 
 
 if __name__ == "__main__":

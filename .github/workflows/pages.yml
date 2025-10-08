@@ -70,6 +70,7 @@ jobs:
           set -euxo pipefail
           mkdir -p _site
           cp -v scheduled_workflows.html _site/
+          cp -v unscheduled_workflows.html _site/ 
           cp -v index.html _site/
           if [ -d graphs ]; then cp -rv graphs _site/; fi
           echo "Contents to deploy:" && find _site -maxdepth 2 -print

@@ -5,7 +5,7 @@ from pathlib import Path
 from html import escape as _escape_html
 from typing import Optional, Dict
 
-from .html_theme import _dark_base_css  # shared dark CSS
+from .html_theme import dark_base_css  # shared dark CSS
 
 
 def write_workflow_html_inline(svg_text: str, html_path: str, project: str, workflow: str) -> None:
@@ -17,7 +17,7 @@ def write_workflow_html_inline(svg_text: str, html_path: str, project: str, work
     DEFAULT_ZOOM_STEP = 0.1
 
     def _workflow_page_css() -> str:
-        return _dark_base_css() + """
+        return dark_base_css() + """
         /* wider page */
         .wrap{max-width:100%; margin:0 auto; padding:16px 20px}
         .stage{padding:10px}
@@ -211,7 +211,7 @@ def write_sql_page(
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{_escape_html(project)} · {_escape_html(querypath)}</title>
   <link rel="stylesheet" href="https://unpkg.com/prismjs/themes/prism-tomorrow.css">
-  <style>{_dark_base_css()}
+  <style>{dark_base_css()}
     pre{{white-space:pre;overflow:auto;max-height:75vh;padding:12px;border-radius:12px;
         border:1px solid var(--border);background:#0f1117}}
     .meta{{color:var(--muted);font-size:12px;margin-top:8px}}
