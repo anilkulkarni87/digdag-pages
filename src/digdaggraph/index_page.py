@@ -120,7 +120,7 @@ def write_unscheduled_workflows(entries: list[ScheduleEntry], out_path: str = UN
 <meta charset="utf-8">
 <title>Unscheduled Workflows</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>{_dark_base_css()}
+<style>{dark_base_css()}
   a.button{{display:inline-block;margin-right:8px;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:#1f2937;color:var(--text)}}
   table{{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;
          border:1px solid var(--border);border-radius:12px;background:var(--panel)}}
