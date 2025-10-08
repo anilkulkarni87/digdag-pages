@@ -69,6 +69,7 @@ def main() -> None:
             with open(input_file_path, encoding="utf-8") as f:
                 data_raw = yaml.load(f, Loader=DigLoader)
                 data = resolve_includes(data_raw) or {}
+            href = f"./{GRAPHS_DIR}/{path.parent.name}/{path.name.replace('.dig','.html')}"
             if "schedule" in data:
                 label = _label_for_schedule(data["schedule"])
                 schedule_entries.append(
@@ -76,7 +77,7 @@ def main() -> None:
                         project=path.parent.name,
                         workflow=path.name,
                         schedule_text=label,
-                        href=f"./{GRAPHS_DIR}/{path.parent.name}/{path.name.replace('.dig','.html')}",
+                        href=href,
                     )
                 )
             else:
