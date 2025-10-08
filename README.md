@@ -13,6 +13,12 @@ digdag-pages
 ```
 Outputs into `graphs/` and a root `scheduled_workflows.html`.
 
+### Treasure Data Console links
+The SQL page shows “Open in TD Console” links. Set your region/base URL via:
+
+```bash
+export TD_CONSOLE_BASE="https://console.treasuredata.com"  # change per region/account
+
 
 ## Examples
 A runnable `examples/sample_project` is included (schedule, `!include`, `td>` -> SQL demo).
